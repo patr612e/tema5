@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+
+    <div class="hej"></div>
+
+    <style>
+        .minedyr {
+            border: 1px solid black;
+
+        }
+    </style>
+
+
+
+    <script>
+        let alleDyr = [];
+
+        async function hentJson() {
+
+            const myJson = await fetch("dyr.json");
+
+            alleDyr = await myJson.json();
+
+            start();
+        }
+
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        function start() {
+            let destination = document.querySelector(".hej");
+            alleDyr.forEach(dyr => {
+                destination.innerHTML += `<div class="minedyr">                         <h3> ${dyr.navn} </h3>
+                <p> ${dyr.type} fra ${dyr.levested} </p>
+                <img src= ${dyr.billede} alt=${dyr.navn}> </div>`;
+            })
+
+        }
+    </script>
+</body>
+
+</html>
