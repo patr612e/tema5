@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+
+    <div class="liste"></div>
+
+    <style>
+        .minepersoner {
+            border: 1px solid black;
+
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+
+        .liste {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+
+        @media only screen and (min-width: 768px) {
+
+            .liste {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media only screen and (min-width: 1024px) {
+
+            .liste {
+                grid-template-columns: 1fr 1fr 1fr;
+
+            }
+        }
+    </style>
+
+
+
+    <script>
+        let allePersoner = [];
+
+        async function hentJson() {
+
+            const myJson = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+
+            allePersoner = await myJson.json();
+
+            start();
+        }
+
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        function start() {
+            let destination = document.querySelector(".liste");
+            allePersoner.forEach(person => {
+                destination.innerHTML += `<div class="minepersoner">                      <h2> ${person.navn} </h2>
+                <img src= ${person.billede} alt=${person.navn}> <br>
+                <a href= "www.github.com/${person.github}">${person.github}</a>
+
+        </div>`;
+            })
+
+        }
+    </script>
+</body>
+
+</html>
