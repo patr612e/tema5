@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        .minedyr {}
+
+        img {
+            max-width: 100%
+        }
+
+        .liste {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .liste {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) {
+            .liste {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .menu {
+            text-align: center;
+        }
+
+        .valgt {
+            background-color: red;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /*
+        .ret {
+            background-color: beige
+        }
+*/
+
+        button {
+            display: inline-block;
+            background-color: antiquewhite;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>Alle</h1>
+    <div class="menu">
+        <button class="filter valgt" data-hold="alle">Alle</button>
+        <button class="filter" data-hold="a">Hold A</button>
+        <button class="filter" data-hold="b">Hold B</button>
+    </div>
+
+
+    <div class="liste"></div>
+
+    <script>
+        let alleRetter = [];
+        let filter = "alle";
+
+
+        document.addEventListener("DOMContentLoaded",
+            start);
+
+        function start() {
+            let dest = document.querySelector(".liste");
+            async function getJson() {
+                let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
+                alleRetter = await jsonData.json();
+                //                alleRetter.sort((a, b) => {
+                //                    return (a.alder - b.alder);
+                //                });
+                alleRetter.sort((a, b) => {
+                    return a.navn.localeCompare(b.navn);
+                })
+                visRetter();
+            }
+
+            function visRetter() {
+                dest.innerHTML = "";
+                alleRetter.forEach(ret => {
+                    if (filter == "alle" || filter == ret.hold) {
+                        dest.innerHTML +=
+                            `<div class="ret">
+                                <img src="imgs/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+                                <h2>${ret.navn}</h2>
+                                <h3>${ret.kort}</h3>
+                                <p>${ret.pris} kr. </p>
+                            </div>
+                        `;
+
+
+                    }
+                })
+            }
+
+            getJson();
+
+            document.querySelectorAll(".filter").forEach(but => {
+                but.addEventListener("click", filtrering);
+            })
+
+            function filtrering() {
+                document.querySelectorAll(".filter").forEach(but => {
+                    but.classList.remove("valgt");
+                });
+                this.classList.add("valgt");
+                document.querySelector("h1").textContent = this.textContent;
+                filter = this.getAttribute("data-hold");
+                visRetter();
+            }
+
+        }
+    </script>
+
+
+</body>
+
+</html>
