@@ -11,7 +11,7 @@
 <body>
 
 
-    <div class="hej"></div>
+    <div class="dyr"></div>
 
     <style>
         .minedyr {
@@ -23,6 +23,7 @@
 
 
     <script>
+
         let alleDyr = [];
 
         async function hentJson() {
@@ -37,7 +38,7 @@
         document.addEventListener("DOMContentLoaded", hentJson);
 
         function start() {
-            let destination = document.querySelector(".hej");
+            let destination = document.querySelector(".dyr");
             alleDyr.forEach(dyr => {
                 destination.innerHTML += `<div class="minedyr">                         <h3> ${dyr.navn} </h3>
                 <p> ${dyr.type} fra ${dyr.levested} </p>
@@ -45,6 +46,7 @@
             })
 
         }
+
     </script>
 </body>
 

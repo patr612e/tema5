@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        .minedyr {}
+
+        img {
+            max-width: 100%
+        }
+
+        .liste {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .liste {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) {
+            .liste {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .menu {
+            text-align: center;
+        }
+
+        .valgt {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu">
+        <button class="filter valgt" data-hold="alle">Alle</button>
+        <button class="filter" data-hold="a">Hold A</button>
+        <button class="filter" data-hold="b">Hold B</button>
+    </div>
+
+
+    <div class="liste">
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded",
+            hentJson);
+
+        let allePersoner = [];
+        let filter = "alle";
+
+
+
+        async function hentJson() {
+            const myJson = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+            allePersoner = await myJson.json();
+            start();
+        }
+
+        function start() {
+            dest.innerHTML = "";
+            let dest = document.querySelector(".liste");
+            allePersoner.forEach(person => {
+                if (filter == person.hold)
+                    dest.innerHTML +=
+                    `<div class="minliste">
+                            <h2>${person.navn}</h2>
+                            <img src="${person.billede}"> <br>
+<a href="https://github.com/${person.github}">${person.github}</a>`;
+
+
+            })
+        }
+    </script>
+
+
+</body>
+
+</html>

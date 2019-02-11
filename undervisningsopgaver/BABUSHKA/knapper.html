@@ -10,11 +10,23 @@
 
 <body>
 
+    <div class="menu">
+
+        <button class="filter valgt" data-hold=alle>Alle</button>
+        <button class="filter valgt" data-hold=a>Hold A</button>
+        <button class="filter valgt" data-hold=b>Hold A</button>
+
+    </div>
+
 
     <div class="liste"></div>
 
     <style>
-        .minepersoner {
+        .valgt {
+            background-color: red;
+        }
+
+        .mineretter {
             border: 1px solid black;
 
         }
@@ -51,13 +63,14 @@
 
 
     <script>
-        let allePersoner = [];
+        let alleRetter = [];
+        let filter = "a";
 
         async function hentJson() {
 
-            const myJson = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+            const myJson = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
 
-            allePersoner = await myJson.json();
+            alleRetter = await myJson.json();
 
             start();
         }
@@ -66,13 +79,17 @@
 
         function start() {
             let destination = document.querySelector(".liste");
-            allePersoner.forEach(person => {
-                destination.innerHTML += `<div class="minepersoner">
-                <h2> ${person.navn} </h2>
-                <img src= ${person.billede} alt=${person.navn}> <br>
-                <a href= "www.github.com/${person.github}">${person.github}</a>
+            alleRetter.forEach(ret => {
+                if (ret.hold == filter) {
+                    destination.innerHTML +=
+                        `<div class="mineretter">
 
-        </div>`;
+                            <h2> ${ret.navn} </h2>
+                            <img src= ${ret.billede} alt=${ret.navn}> <br>
+                            <a href= "www.github.com/${ret.github}">${ret.github}</a>
+
+                        </div>`;
+                }
             })
 
         }
