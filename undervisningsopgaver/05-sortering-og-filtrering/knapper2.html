@@ -95,6 +95,10 @@
             })
 
             function filtrering() {
+                document.querySelectorAll(".filter").forEach(but => {
+                    but.classList.remove("valgt");
+                });
+                this.classList.add("valgt");
                 document.querySelector("h1").textContent = this.textContent;
                 filter = this.getAttribute("data-hold");
                 visPersoner();
