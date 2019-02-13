@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        *,
+        body * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        .person {
+            border: 1px solid silver;
+            padding: 20px;
+        }
+
+
+
+        @media only screen and (min-width: 768px) {
+            .liste {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) {
+            .liste {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+
+        #single {
+            background-color: hsla(0, 15%, 45%, 0.5);
+
+        }
+
+        #indhold {
+            min-height: 50vh;
+            background-color: white;
+            width: 70vw;
+            margin: 4rem auto;
+        }
+
+        #tilbage {}
+
+        #tilbage button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <main id="single">
+        <div id="tilbage">
+            <button>
+                << </button> </div> <section id="indhold">
+                    </section>
+    </main>
+
+
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let github = urlParams.get("github");
+
+        let personer = [];
+
+
+        document.addEventListener("DOMContentLoaded",
+            start);
+
+        function start() {
+
+            async function getJson() {
+                let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+                personer = await jsonData.json();
+                personer.sort((a, b) => {
+                    return a.navn.localeCompare(b.navn);
+                })
+                visSingle();
+            }
+
+            function visSingle() {
+                let dest = document.querySelector("#indhold");
+
+                dest.innerHTML = "";
+                personer.forEach(person => {
+                    if (github == person.github)
+                        let template =
+                            `<article class="person">
+                                <h2>${person.navn}</h2>
+                                <img class= "billede" src="${person.billede}" alt="${person.navn}">
+                                <p>Hold: ${person.hold}</p>
+                                <h3> ${person.navn}'s historie </h3>
+                                <p> ${person.historie} </p>
+                            </article>`;
+
+
+                    dest.insertAdjacentHTML("beforeend", template);
+
+
+
+
+                });
+            }
+
+            getJson();
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        *,
+        body * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        .liste {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .liste {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) {
+            .liste {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        .menu {
+            text-align: center;
+        }
+
+        .valgt {
+            background-color: red;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #single {
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: scroll;
+            background-color: hsla(0, 15%, 45%, 0.5);
+
+        }
+
+        #indhold {
+            min-height: 50vh;
+            background-color: white;
+            width: 70vw;
+            margin: 2rem auto;
+        }
+
+        #luk {}
+
+        #luk button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <main id="single">
+        <div id="luk">
+            <button> X </button>
+        </div>
+        <section id="indhold"></section>
+    </main>
+
+    <h1>Alle</h1>
+    <div class="menu">
+        <button class="filter valgt" data-hold="alle">Alle</button>
+        <button class="filter" data-hold="a">Hold A</button>
+        <button class="filter" data-hold="b">Hold B</button>
+    </div>
+
+
+    <div class="liste"></div>
+
+    <script>
+        let personer = [];
+        let filter = "alle";
+
+
+        document.addEventListener("DOMContentLoaded",
+            start);
+
+        function start() {
+            let dest = document.querySelector(".liste");
+            async function getJson() {
+                let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+                personer = await jsonData.json();
+                //                personer.sort((a, b) => {
+                //                    return (a.alder - b.alder);
+                //                });
+                personer.sort((a, b) => {
+                    return a.navn.localeCompare(b.navn);
+                })
+                visPersoner();
+            }
+
+            function visPersoner() {
+                dest.innerHTML = "";
+                personer.forEach(person => {
+                        if (filter == "alle" || filter == person.hold) {
+                            let template =
+                                `<article class="person">
+                                <h2>${person.navn}</h2>
+                                <img class= "billede" src="${person.billede}" alt="${person.navn}">
+                                <p>Hold: ${person.hold}</p>
+                                <p>Alder: ${person.alder} år</p>
+                            </article>
+                        `;
+
+                            dest.insertAdjacentHTML("beforeend", template);
+                            dest.lastElementChild.addEventListener("click", () => {
+                                location.href = "06-single.html?github=" + person.github;
+                            });
+
+                            function visSingle(person) {
+                                document.querySelector("#indhold").innerHTML =
+
+                                    `<article class="person">
+                                <h2>${person.navn}</h2>
+                                <img class= "billede" src="${person.billede}" alt="${person.navn}">
+                                <p>Hold: ${person.hold}</p>
+                                <h3> ${person.navn}'s historie </h3>
+                                <p> ${person.historie} </p>
+                            </article>`;
+
+                                document.querySelector("#popup").style.display = "block";
+                                document.querySelector("#popup #luk").addEventListener("click", close);
+
+
+                                function close() {
+                                    document.querySelector("#popup").style.display = "none";
+                                }
+
+
+
+                            }
+                        })
+                }
+
+                getJson();
+
+                document.querySelectorAll(".filter").forEach(but => {
+                    but.addEventListener("click", filtrering);
+                })
+
+                function filtrering() {
+                    document.querySelectorAll(".filter").forEach(but => {
+                        but.classList.remove("valgt");
+                    });
+                    this.classList.add("valgt");
+                    document.querySelector("h1").textContent = this.textContent;
+                    filter = this.getAttribute("data-hold");
+                    visPersoner();
+                }
+
+            }
+
+    </script>
+
+
+</body>
+
+</html>
