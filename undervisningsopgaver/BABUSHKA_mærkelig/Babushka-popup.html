@@ -40,7 +40,9 @@
         }
 
         .valgt {
-            background-color: blue;
+            background-color: beige;
+            color: black;
+            border: 1px solid black;
         }
 
         h1 {
@@ -52,6 +54,7 @@
         .ret {
             background-color: beige;
             margin: 30px;
+            cursor: pointer;
         }
 
 
@@ -67,11 +70,52 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+
+        #popup {
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: hsla(0, 46%, 18%, 0.5);
+            display: none;
+            overflow: scroll;
+        }
+
+        #indhold {
+            height: 80vh;
+            width: 50vw;
+            /*            background-color: white;*/
+            margin: 4rem auto;
+            text-align: center;
+
+        }
+
+        #luk {
+            position: fixed;
+            right: 2rem;
+        }
+
+        #luk button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 
 <body>
+
+    <div id="popup">
+
+        <div id="luk">
+            <button>X</button>
+        </div>
+
+        <div id="indhold"></div>
+
+    </div>
+
     <h1>Alle retter</h1>
 
     <nav>
@@ -104,10 +148,6 @@
                     return (a.pris - b.pris);
                 });
 
-                //                alleRetter.sort((a, b) => {
-                //                    return a.navn.localeCompare(b.navn);
-                //                })
-
                 visRetter();
             }
 
@@ -115,7 +155,7 @@
                 dest.innerHTML = "";
                 alleRetter.forEach(ret => {
                     if (filter == "alle" || filter == ret.kategori) {
-                        dest.innerHTML +=
+                        let template =
                             `<article class="ret">
                                 <img src="imgs/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
                                 <h2>${ret.navn}</h2>
@@ -123,6 +163,32 @@
                                 <p>${ret.pris} kr. </p>
                             </article>
                         `;
+
+
+                        // Åben pop-up
+
+                        dest.insertAdjacentHTML("beforeend", template);
+                        dest.lastElementChild.addEventListener("click", visSingle);
+
+                        // Indholdet i pop-up vinduet
+
+                        function visSingle() {
+                            document.querySelector("#indhold").innerHTML =
+
+                                `<article class="ret">
+                                    <img src="imgs/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+                                    <h2>${ret.navn}</h2>
+                                    <p>${ret.lang}</p>
+                                    <p>${ret.pris} kr. </p>
+                                </article>`;
+
+                            document.querySelector("#popup").style.display = "block";
+                            document.querySelector("#popup #luk").addEventListener("click", close);
+                        }
+
+                        function close() {
+                            document.querySelector("#popup").style.display = "none";
+                        }
 
 
                     }

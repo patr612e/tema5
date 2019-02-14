@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        #single {
+            background-color: hsla(0, 46%, 18%, 0.5);
+        }
+
+        #indhold {
+            min-height: 50vh;
+            background-color: white;
+            width: 70vw;
+            margin: 4rem auto;
+        }
+
+        #luk button {
+            font-size: 2rem;
+            padding: 1rem 2rem;
+            cursor: pointer;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            max-width: 100%
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <main id="single">
+        <div id="luk">
+            <button>
+                << </button> </div> <section id="indhold">
+                    </section>
+    </main>
+
+
+
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search)
+        let github = urlParams.get("github");
+        console.log(github);
+        document.querySelector("#luk button").addEventListener("click", () => {
+            location.href = "popup-singleview.html"
+        })
+        let allePersoner = [];
+        document.addEventListener("DOMContentLoaded",
+            hentJson);
+        async function hentJson() {
+            const myJson = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1OLlD_GRoz71piHvnW306omRAyHS7vtLOILQt-K0YF_c");
+            allePersoner = await myJson.json();
+            /*allePersoner.sort((b, a) => {
+                return (a.alder - b.alder);
+            });*/
+            allePersoner.sort((a, b) => {
+                return a.navn.localeCompare(b.navn);
+            });
+            start();
+        }
+
+        function start() {
+            let dest = document.querySelector("#indhold");
+            dest.innerHTML = "";
+            allePersoner.forEach(person => {
+                if (github == person.github) {
+                    //læg indholdet i en variabel
+                    let template = `
+<article class="person">
+<h2>${person.navn}</h2>
+<img src="${person.billede}"> <br>
+<a href="https://github.com/${person.github}">${person.github}</a>
+<p>Hold: ${person.hold}, Alder:${person.alder}</p>
+    </article>
+`;
+                    //åben popup
+                    dest.insertAdjacentHTML("beforeend", template);
+                    //indholdet i popupvinduet
+                    function visSingle() {
+                        document.querySelector("#indhold").innerHTML = `<article class="person">
+                        <h2>${person.navn}</h2>
+                        <img src="${person.billede}"> <br>
+                        <a href="https://github.com/${person.github}">${person.github}</a>
+                        <p>Hold: ${person.hold}, Alder:${person.alder}</p>
+                        <h3>${person.navn}'s historie</h3>
+                        <p>${person.historie}</p>
+                </article>`;
+                        dest.insertAdjacentHTML("beforeend", template);
+                        location.href = "02-popup-singleview.html?github=" + person.github;
+                        // document.querySelector("#popup").style.display = "block";
+                        // document.querySelector("#popup #luk").addEventListener("click", close);
+                    }
+                    //                    function close() {
+                    //                        document.querySelector("#popup").style.display = "none";
+                    //                    }
+                }
+            })
+        } //function start slut
+
+    </script>
+
+</body>
+
+
+</html>
