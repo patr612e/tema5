@@ -10,6 +10,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            background-color: beige;
+        }
+
 
         body {
             margin: 0;
@@ -23,7 +27,7 @@
 
 
         #single {
-            background-color: hsla(0, 46%, 18%, 0.5);
+            background-color: beige;
         }
 
         #tilbage button {
@@ -33,11 +37,24 @@
         }
 
         #indhold {
-            min-height: 50vh;
+            min-height: 40vh;
             background-color: white;
-            width: 70vw;
-            margin: 4rem auto;
+            width: 50vw;
+            margin: 1rem auto;
         }
+
+        .ret p {
+            font-size: 18px;
+            margin: 15px;
+
+        }
+
+        .ret h2 {
+            font-size: 22px;
+            margin: 35px 15px 15px 15px;
+        }
+
+        .ret {}
 
 
         /*
@@ -118,10 +135,10 @@
                     if (id == ret.id) {
                         let template =
                             `<article class="ret">
-                                <img src="imgs/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
                                 <h2>${ret.navn}</h2>
-                                <p>${ret.kort}</p>
+                                <p>${ret.lang}</p>
                                 <p>${ret.pris} kr. </p>
+                                <img src="imgs/large/${ret.billede}.jpg" alt="${ret.navn}">
                             </article>
                         `;
 

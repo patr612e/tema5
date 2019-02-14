@@ -18,19 +18,22 @@
         #liste {
             display: grid;
             grid-template-columns: 1fr;
-            text-align: center;
+            margin: auto 50px;
+
 
         }
 
         @media only screen and (min-width: 768px) {
             #liste {
                 grid-template-columns: 1fr 1fr;
+                margin: auto 50px;
             }
         }
 
         @media only screen and (min-width: 1024px) {
             #liste {
                 grid-template-columns: 1fr 1fr 1fr;
+                margin: auto 50px;
             }
         }
 
@@ -57,6 +60,12 @@
             cursor: pointer;
         }
 
+        .ret p,
+        h2,
+        h3 {
+            margin: 10px;
+        }
+
 
         button {
             background-color: #adadad;
@@ -76,18 +85,25 @@
             width: 100vw;
             height: 100vh;
             position: fixed;
-            background-color: hsla(0, 46%, 18%, 0.5);
+            background-color: hsla(0, 0%, 3%, 0.5);
             display: none;
             overflow: scroll;
         }
 
         #indhold {
-            height: 80vh;
-            width: 50vw;
-            /*            background-color: white;*/
+
+            height: 50vh;
+            width: 70vw;
+
             margin: 4rem auto;
             text-align: center;
+        }
 
+        #indhold p,
+        h2,
+        h3 {
+            text-align: left;
+            margin: 10px;
         }
 
         #luk {
@@ -176,7 +192,7 @@
                             document.querySelector("#indhold").innerHTML =
 
                                 `<article class="ret">
-                                    <img src="imgs/small/${ret.billede}-sm.jpg" alt="${ret.navn}">
+                                    <img src="imgs/large/${ret.billede}.jpg" alt="${ret.navn}">
                                     <h2>${ret.navn}</h2>
                                     <p>${ret.lang}</p>
                                     <p>${ret.pris} kr. </p>
